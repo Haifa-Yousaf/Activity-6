@@ -22,6 +22,7 @@ pipeline {
             steps {
                 echo "Checking out branch: ${params.BRANCH_NAME}"
                 checkout scm
+                echo "Student Name: ${params.STUDENT_NAME}"
             }
         }
 
