@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Temperature Converter</title>
+</head>
+<body>
+    <h1>Temperature Converter</h1>
+    <form action="/convert" method="POST">
+        <label for="conversion">Choose conversion:</label>
+        <select name="conversion" id="conversion">
+            <option value="C to F">Celsius to Fahrenheit</option>
+            <option value="F to C">Fahrenheit to Celsius</option>
+            <option value="C to K">Celsius to Kelvin</option>
+            <option value="K to C">Kelvin to Celsius</option>
+        </select>
+        <br><br>
+        <label for="value">Enter value:</label>
+        <input type="text" name="value" id="value" required>
+        <br><br>
+        <button type="submit">Convert</button>
+    </form>
+</body>
+</html>

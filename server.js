@@ -1,48 +1,31 @@
-const express = require("express");
-const {celsiusToFahrenheit, fahrenheitToCelsius, celsiusToKelvin, kelvinToCelsius } = require("./converter");
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const { celsiusToFahrenheit, fahrenheitToCelsius, celsiusToKelvin, kelvinToCelsius } = require('./converter');
 
 const app = express();
-const PORT = 8000;
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get("/", (req, res) => {
-    res.json({ message: "Temperature Conversion Web Service Running",
-        endpoints: [
-            "/c-to-f?value=",
-            "/f-to-c?value=",
-            "/c-to-k?value=",
-            "/k-to-c?value="
-        ]
-    });
+function convertTemperature(value, type) {
+    const v = parseFloat(value);
+    if (isNaN(v)) return "Invalid input";
+
+    switch(type) {
+        case "C to F": return celsiusToFahrenheit(v).toFixed(2);
+        case "F to C": return fahrenheitToCelsius(v).toFixed(2);
+        case "C to K": return celsiusToKelvin(v).toFixed(2);
+        case "K to C": return kelvinToCelsius(v).toFixed(2);
+        default: return "Unknown conversion";
+    }
+}
+
+app.post('/convert', (req, res) => {
+    const { value, conversion } = req.body;
+    const result = convertTemperature(value, conversion);
+    res.send(`<h2>Result: ${result}</h2><a href="/">Go back</a>`);
 });
 
-// Celsius → Fahrenheit
-app.get("/c-to-f", (req, res) => {
-    const c = parseFloat(req.query.value);
-    if (isNaN(c)) return res.status(400).json({ error: "Provide ?value=<number>" });
-    res.json({ celsius: c, fahrenheit: celsiusToFahrenheit(c) });
-});
-
-// Fahrenheit → Celsius
-app.get("/f-to-c", (req, res) => {
-    const f = parseFloat(req.query.value);
-    if (isNaN(f)) return res.status(400).json({ error: "Provide ?value=<number>" });
-    res.json({ fahrenheit: f, celsius: fahrenheitToCelsius(f) });
-});
-
-// Celsius → Kelvin
-app.get("/c-to-k", (req, res) => {
-    const c = parseFloat(req.query.value);
-    if (isNaN(c)) return res.status(400).json({ error: "Provide ?value=<number>" });
-    res.json({ celsius: c, kelvin: celsiusToKelvin(c) });
-});
-
-// Kelvin → Celsius
-app.get("/k-to-c", (req, res) => {
-    const k = parseFloat(req.query.value);
-    if (isNaN(k)) return res.status(400).json({ error: "Provide ?value=<number>" });
-    res.json({ kelvin: k, celsius: kelvinToCelsius(k) });
-});
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.listen(8000, () => {
+    console.log('Server running at http://localhost:8000');
 });
