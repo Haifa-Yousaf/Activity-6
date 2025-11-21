@@ -1,8 +1,8 @@
 services:
-  temp_app:
+  app:
     build: .
     ports:
-      - "8000:8000"
+      - "3000:3000"
     volumes:
       - converter_logs:/app/logs
 

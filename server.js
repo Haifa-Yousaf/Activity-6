@@ -5,7 +5,7 @@ const fs = require("fs");   //For docker volume logging
 const { celsiusToFahrenheit, fahrenheitToCelsius, celsiusToKelvin, kelvinToCelsius } = require('./converter');
 
 const app = express();
-const PORT = 8000;
+const PORT = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
